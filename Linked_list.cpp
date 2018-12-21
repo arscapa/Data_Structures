@@ -1,7 +1,7 @@
 #include <iostream>
+#include <assert.h>
 
 // Linked list of integers
-
 struct Node 
 	{
 		int value;
@@ -46,11 +46,41 @@ void prepend(int val, Node* & ptr)
 
 	};
 	
-void printList(const Node* ptr)
+	
+void insert(int val, Node* & ptr, int pos)
+// Adds item to list at given position
 	{
-		std::cout << (*ptr).value << std::endl;
+		assert(pos>0);
+		
+		// Check if location to insert is first in list
+		if(pos==1 || ptr==NULL){prepend(val,ptr);} else{	
+		
+			// Create new node to add to list
+			Node* item = new Node;
+			item->value = val;
+			item->next = NULL;
+			
+			// If not, traverse through list until reach given item
+			int counter = 1;
+			Node* currentItem = ptr;
+			// Check haven't reached position yet or end of list
+			while(counter != pos-1 && currentItem->next != NULL) 
+			{
+				currentItem = currentItem->next; 
+				counter++;
+			};
+			item->next = currentItem->next;
+			currentItem->next = item;	
+		};
+	};
+	
+	
+void printList(const Node* ptr, int itemNum = 1)
+	{
+		assert(ptr!=NULL);
+		std::cout << "List Item #" << itemNum << ": " << (*ptr).value << std::endl;
 		if (ptr->next != NULL){
-			printList(ptr->next);
+			printList(ptr->next,++itemNum);
 		}
 	};
 
@@ -63,6 +93,10 @@ int main()
 	append(6,listPtr);
 	append(8,listPtr);
 	prepend(9,listPtr);
+	
+	printList(listPtr);
+	
+	insert(5,listPtr,3);
 	
 	printList(listPtr);
 	
