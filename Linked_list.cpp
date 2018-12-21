@@ -74,6 +74,27 @@ void insert(int val, Node* & ptr, int pos)
 		};
 	};
 	
+void deleteItem(int pos, Node* & ptr)
+// Delete a node from list at given position
+{
+	assert(pos>0);
+	
+	Node* currentItem = ptr;
+	if(pos==1){
+	ptr = currentItem->next;
+	delete currentItem;
+	return;
+	}
+	for(int i=1; i<pos-1; i++)
+	{
+		currentItem = currentItem->next;
+	};
+	Node* nextItem = currentItem->next;
+	currentItem->next = nextItem->next;
+	delete nextItem;
+	
+}
+	
 	
 void printList(const Node* ptr, int itemNum = 1)
 	{
@@ -93,11 +114,14 @@ int main()
 	append(6,listPtr);
 	append(8,listPtr);
 	prepend(9,listPtr);
-	
 	printList(listPtr);
+	std::cout << '\n';
 	
 	insert(5,listPtr,3);
-	
+	printList(listPtr);
+	std::cout << '\n';
+		
+	deleteItem(2,listPtr);
 	printList(listPtr);
 	
 	return 0;
