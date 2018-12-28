@@ -104,6 +104,16 @@ void printList(const Node* ptr, int itemNum = 1)
 			printList(ptr->next,++itemNum);
 		}
 	};
+	
+void ReversePrint(struct Node* p)
+{
+	if(p == NULL)
+	{
+		return;
+	}
+	ReversePrint(p->next);
+	std::cout << p->value << std::endl;
+};
 
 
 
@@ -123,6 +133,8 @@ int main()
 		
 	deleteItem(2,listPtr);
 	printList(listPtr);
+	
+	ReversePrint(listPtr);
 	
 	return 0;
 }
