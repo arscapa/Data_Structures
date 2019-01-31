@@ -6,6 +6,15 @@ struct BstNode {
 	BstNode* right;
 };
 
+
+//Function to find minimum in a tree. 
+BstNode* FindMin(BstNode* root)
+{
+	while(root->left != NULL) root = root->left;
+	return root;
+}
+
+
 BstNode* GetNewNode(int data) {
 	BstNode* newNode = new BstNode();;
 	newNode->data = data;
@@ -26,7 +35,6 @@ BstNode* Insert(BstNode* head, int data){		// return type of function is pointer
 	return head;
 }
 
-
 bool Search(BstNode* head, int data) {
 	// Tree is empty or reached last item
 	if (head == NULL){ return false; }
@@ -38,18 +46,82 @@ bool Search(BstNode* head, int data) {
 	else { return Search(head->right,data); }
 }
 
+BstNode* Delete(BstNode* root, int data) {
+	if(root == NULL) { return root; }
+	else if(data < root->data){ root->left = Delete(root->left,data); }
+	else if (data > root->data) { root->right = Delete(root->right,data); }
+	else{
+		// data found, handle deletion
+		
+		// Case 1: No child
+		if(root->left == NULL && root->right == NULL){
+			delete root;
+			root = NULL;		// don't leave danling pointer
+		}
+		// Case 2: One Child
+		else if(root->left == NULL){
+			BstNode* temp = root;
+			root = root->right;
+			delete temp;
+		}
+		else if(root->right == NULL){
+			BstNode* temp = root;
+			root = root->left;
+			delete temp;
+		}
+		// Case 3: 2 Children
+		else{
+			// find min value in right subtree
+			BstNode* temp = FindMin(root->right);
+			// set current root data equal to minimum value in right subtree
+			root->data = temp->data;
+			// now that tree is updated, delete duplicate number from right-subtree
+			root->right = Delete(root->right,temp->data);
+		}
+		return root;
+	}
+}
+
+
+//Function to print nodes
+void Inorder(BstNode *root) {
+	if(root == NULL) return;
+ 
+	Inorder(root->left);       				//Visit left subtree
+	std::cout << root->data << std::endl;  //Print data
+	Inorder(root->right);     			   // Visit right subtree
+}
+
+
+
 int main() {
 	BstNode* root = NULL;	// Creating an empty tree
-	root = Insert(root,15);		// collecting pointer returned from 'insert' function and updating root
+	root = Insert(root,5);		// collecting pointer returned from 'insert' function and updating root
 	root = Insert(root,10);
-	root = Insert(root,20);
-	root = Insert(root,25);
-	root = Insert(root,74);
+	root = Insert(root,3); 
+	root = Insert(root,4); 
+	root = Insert(root,1);
+	root = Insert(root,11);
+
+	//Print Nodes before deletion
+	std::cout<<"Tree before deletion: \n";
+	Inorder(root);
+	std::cout<<"\n";
+
+
+	// Deleting node with value 5, change this value to test other cases
+	root = Delete(root,5);
+
+	//Print tree
+	std::cout<<"Tree after deletion: \n";
+	Inorder(root);
+	std::cout<<"\n";
 	
 	int number;
 	std::cout << "Enter a number to be searched\n";
 	std::cin >> number;
 	if(Search(root,number)==true) std::cout<< "Found\n";
 	else std::cout << "Not found\n";
+	
 	
 }
