@@ -1,4 +1,5 @@
 #include <iostream>
+#include<queue>
 
 struct BstNode {
 	int data;
@@ -93,8 +94,36 @@ void Inorder(BstNode *root) {
 }
 
 
+void levelOrder(BstNode *root) {
+	std::cout << "Printing tree by level (breadth first)" << std::endl;
+	if(root == NULL) return;
+	
+	std::queue<BstNode*> Q;
+	Q.push(root);
+	
+	while(!Q.empty()){
+		BstNode* current = Q.front();
+		std::cout << current->data << std::endl;
+		if(current->left != NULL) Q.push(current->left);
+		if(current->right != NULL) Q.push(current->right);
+		Q.pop();	// remove front element from queue
+	}	
+	std::cout << "\n";
+}
+
 
 int main() {
+	
+		/*Code To Test the logic
+	  Creating an example tree
+	            5
+			   / \
+			  3   10
+			 / \   \
+			1   4   11
+    */
+    
+    
 	BstNode* root = NULL;	// Creating an empty tree
 	root = Insert(root,5);		// collecting pointer returned from 'insert' function and updating root
 	root = Insert(root,10);
@@ -102,6 +131,9 @@ int main() {
 	root = Insert(root,4); 
 	root = Insert(root,1);
 	root = Insert(root,11);
+
+	levelOrder(root);
+
 
 	//Print Nodes before deletion
 	std::cout<<"Tree before deletion: \n";
@@ -122,6 +154,8 @@ int main() {
 	std::cin >> number;
 	if(Search(root,number)==true) std::cout<< "Found\n";
 	else std::cout << "Not found\n";
+	
+
 	
 	
 }
